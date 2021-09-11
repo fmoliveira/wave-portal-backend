@@ -1,3 +1,9 @@
+const Reaction = {
+	Wave: 0,
+	Cake: 1,
+	Fire: 2,
+};
+
 async function main() {
 	const [owner, randomPerson] = await hre.ethers.getSigners();
 
@@ -8,14 +14,21 @@ async function main() {
 	console.log("Contract deployed by:", owner.address);
 
 	let waveCount = await waveContract.getTotalWaves();
-	let waveTxn = await waveContract.wave();
-	await waveTxn.wait();
 
+	let waveTxn = await waveContract.wave(Reaction.Wave);
+	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
 
-	waveTxn = await waveContract.connect(randomPerson).wave();
+	waveTxn = await waveContract.connect(randomPerson).wave(Reaction.Cake);
 	await waveTxn.wait();
+	waveCount = await waveContract.getTotalWaves();
 
+	waveTxn = await waveContract.connect(randomPerson).wave(Reaction.Fire);
+	await waveTxn.wait();
+	waveCount = await waveContract.getTotalWaves();
+
+	waveTxn = await waveContract.connect(randomPerson).wave(100);
+	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
 }
 
