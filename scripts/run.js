@@ -26,10 +26,6 @@ async function main() {
 	waveTxn = await waveContract.connect(randomPerson).wave(Reaction.Fire);
 	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
-
-	waveTxn = await waveContract.connect(randomPerson).wave(100);
-	await waveTxn.wait();
-	waveCount = await waveContract.getTotalWaves();
 }
 
 main()
