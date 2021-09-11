@@ -17,3 +17,4 @@ Follow the steps below to run the project locally:
 - List test accounts from your local hardhat node: `npx hardhat accounts`
 - Compile smart contracts: `npx hardhat compile`
 - Run unit tests: `npx hardhat test`
+- Deploy contract to local hardnat node: `npx hardhat run scripts/run.js`
