@@ -2,8 +2,6 @@
 
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 contract WavePortal {
 	enum Reaction {
 		Wave,
@@ -27,9 +25,21 @@ contract WavePortal {
 		uint256 timestamp
 	);
 
+	constructor() payable {}
+
 	function wave(Reaction _reaction, string memory _message) public {
 		waveList.push(Wave(_reaction, _message, msg.sender, block.timestamp));
 		emit NewWave(_reaction, _message, msg.sender, block.timestamp);
+
+		if (_reaction != Reaction.Wave || bytes(_message).length > 20) {
+			uint256 prizeAmount = 0.0001 ether;
+			require(
+				prizeAmount <= address(this).balance,
+				"Contract funds are insufficient to grant prize."
+			);
+			(bool success, ) = (msg.sender).call{value: prizeAmount}("");
+			require(success, "Failed to withdraw money from contract.");
+		}
 	}
 
 	function getAllWaves() public view returns (Wave[] memory) {
