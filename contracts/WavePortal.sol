@@ -16,9 +16,11 @@ contract WavePortal {
 		uint256 timestamp;
 	}
 
-	Wave[] public waveList;
 	uint256 totalWaves;
 	uint256 private seed;
+
+	Wave[] public waveList;
+	mapping(address => uint256) public lastWavedAt;
 
 	event NewWave(
 		Reaction reaction,
@@ -30,18 +32,29 @@ contract WavePortal {
 	constructor() payable {}
 
 	function wave(Reaction _reaction, string memory _message) public {
+		// anti-spam check
+		require(
+			lastWavedAt[msg.sender] + 15 minutes < block.timestamp,
+			"Wait 15 minutes to send another wave."
+		);
+		lastWavedAt[msg.sender] = block.timestamp;
+
+		// prize randomness
 		totalWaves += 1;
 		waveList.push(Wave(_reaction, _message, msg.sender, block.timestamp));
 		emit NewWave(_reaction, _message, msg.sender, block.timestamp);
 
+		// store private seed to make gaming it more difficult
 		uint256 randomNumber = (block.difficulty + block.timestamp + seed) %
 			100;
 		seed = randomNumber;
 
+		// check preconditions to enter the draw
 		bool entersDraw = _reaction != Reaction.Wave ||
 			bytes(_message).length > 20;
 
-		if (entersDraw && randomNumber < 50) {
+		// grants prize
+		if (entersDraw && randomNumber < 40) {
 			uint256 prizeAmount = 0.0001 ether;
 			require(
 				prizeAmount <= address(this).balance,

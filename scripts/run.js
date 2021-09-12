@@ -5,7 +5,7 @@ const Reaction = {
 };
 
 async function main() {
-	const [owner, randomPerson] = await hre.ethers.getSigners();
+	const [owner, person1, person2] = await hre.ethers.getSigners();
 
 	const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
 	const contractFunds = hre.ethers.utils.parseEther("0.1");
@@ -31,13 +31,13 @@ async function main() {
 	waveCount = await waveContract.getTotalWaves();
 
 	waveTxn = await waveContract
-		.connect(randomPerson)
+		.connect(person1)
 		.wave(Reaction.Cake, "Some cake for you!");
 	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
 
 	waveTxn = await waveContract
-		.connect(randomPerson)
+		.connect(person2)
 		.wave(Reaction.Hype, "Hyped about Web3!!!");
 	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
