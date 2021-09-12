@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: UNLICENSE
 
 pragma solidity ^0.8.0;
 
@@ -8,35 +8,35 @@ contract WavePortal {
 	enum Reaction {
 		Wave,
 		Cake,
-		Fire
+		Hype
 	}
 
 	struct Wave {
 		Reaction reaction;
+		string message;
+		address waver;
+		uint256 timestamp;
 	}
 
 	Wave[] public waveList;
 
-	constructor() {
-		console.log("Hey fam, I am a contract and I am smart!");
+	event NewWave(
+		Reaction reaction,
+		string message,
+		address indexed from,
+		uint256 timestamp
+	);
+
+	function wave(Reaction _reaction, string memory _message) public {
+		waveList.push(Wave(_reaction, _message, msg.sender, block.timestamp));
+		emit NewWave(_reaction, _message, msg.sender, block.timestamp);
 	}
 
-	function wave(Reaction _reaction) public {
-		Wave memory newWave;
-		newWave.reaction = _reaction;
-		waveList.push(newWave);
-
-		if (_reaction == Reaction.Wave) {
-			console.log("%s waved at you!", msg.sender);
-		} else if (_reaction == Reaction.Cake) {
-			console.log("%s sent you some cake!", msg.sender);
-		} else if (_reaction == Reaction.Fire) {
-			console.log("%s is hyped with your work!", msg.sender);
-		}
+	function getAllWaves() public view returns (Wave[] memory) {
+		return waveList;
 	}
 
 	function getTotalWaves() public view returns (uint256) {
-		console.log("We have %d total waves", waveList.length);
 		return waveList.length;
 	}
 }

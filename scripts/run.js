@@ -1,7 +1,7 @@
 const Reaction = {
 	Wave: 0,
 	Cake: 1,
-	Fire: 2,
+	Hype: 2,
 };
 
 async function main() {
@@ -15,15 +15,19 @@ async function main() {
 
 	let waveCount = await waveContract.getTotalWaves();
 
-	let waveTxn = await waveContract.wave(Reaction.Wave);
+	let waveTxn = await waveContract.wave(Reaction.Wave, "Yooo buddy!");
 	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
 
-	waveTxn = await waveContract.connect(randomPerson).wave(Reaction.Cake);
+	waveTxn = await waveContract
+		.connect(randomPerson)
+		.wave(Reaction.Cake, "Some cake for you!");
 	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
 
-	waveTxn = await waveContract.connect(randomPerson).wave(Reaction.Fire);
+	waveTxn = await waveContract
+		.connect(randomPerson)
+		.wave(Reaction.Hype, "Hyped about Web3!!!");
 	await waveTxn.wait();
 	waveCount = await waveContract.getTotalWaves();
 }
