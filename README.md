@@ -18,3 +18,4 @@ Follow the steps below to run the project locally:
 - Compile smart contracts: `npx hardhat compile`
 - Test contract: `npx hardhat run scripts/run.js`
 - Deploy contract to local hardhat node: `npx hardhat run scripts/deploy.js --network localhost`
+- Deploy contract to rinkeby testnet: `npx hardhat run scripts/deploy.js --network rinkeby`
