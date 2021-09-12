@@ -17,6 +17,8 @@ contract WavePortal {
 	}
 
 	Wave[] public waveList;
+	uint256 totalWaves;
+	uint256 private seed;
 
 	event NewWave(
 		Reaction reaction,
@@ -28,10 +30,18 @@ contract WavePortal {
 	constructor() payable {}
 
 	function wave(Reaction _reaction, string memory _message) public {
+		totalWaves += 1;
 		waveList.push(Wave(_reaction, _message, msg.sender, block.timestamp));
 		emit NewWave(_reaction, _message, msg.sender, block.timestamp);
 
-		if (_reaction != Reaction.Wave || bytes(_message).length > 20) {
+		uint256 randomNumber = (block.difficulty + block.timestamp + seed) %
+			100;
+		seed = randomNumber;
+
+		bool entersDraw = _reaction != Reaction.Wave ||
+			bytes(_message).length > 20;
+
+		if (entersDraw && randomNumber < 50) {
 			uint256 prizeAmount = 0.0001 ether;
 			require(
 				prizeAmount <= address(this).balance,
