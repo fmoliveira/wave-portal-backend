@@ -1,4 +1,4 @@
-# My Wave Portal
+# Wave Portal Backend
 
 Send me a hello through the blockchain!
 
